@@ -1,6 +1,9 @@
-import Link from "next/link";
-import { addTask, archiveTaskAction } from "./actions";
+import { Archive, CheckCircle2, ListTodo } from "lucide-react";
 import { getTasks, getArchivedTasks } from "@/lib/tasks";
+import { NewTaskForm } from "@/components/new-task-form";
+import { SortControl } from "@/components/sort-control";
+import { TaskCard } from "@/components/task-card";
+import { EmptyState } from "@/components/empty-state";
 
 export default async function Home({
   searchParams,
@@ -14,195 +17,97 @@ export default async function Home({
   const archivedTasks = getArchivedTasks();
 
   return (
-    <main style={{ padding: "40px" }}>
-      <h1>Task Manager</h1>
-
-      <form action={addTask}>
-        <div>
-          <input
-            type="text"
-            name="title"
-            placeholder="Title"
-            required
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <textarea
-            name="description"
-            placeholder="Description"
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <input
-            type="date"
-            name="due_date"
-            required
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <input
-            type="text"
-            name="topic"
-            placeholder="Topic"
-            required
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">
-          Create Task
-        </button>
-      </form>
-
-      <hr />
-
-      <form method="GET">
-      <label>Sort by: </label>
-
-      <select
-        name="sort"
-        defaultValue={sort}
-      >
-        <option value="due_date">
-          Due Date
-        </option>
-
-        <option value="topic">
-          Topic
-        </option>
-
-        <option value="status">
-          Status
-        </option>
-      </select>
-
-      <button type="submit">
-        Sort
-      </button>
-    </form>
-
-    <hr />
-
-      <h2>Active Tasks</h2>
-
-      {tasks.length === 0 && (
-        <p>No active tasks.</p>
-      )}
-
-      {tasks.map((task) => {
-      const today = new Date().toISOString().split("T")[0];
-
-      const overdue =
-        task.status !== "complete" &&
-        task.due_date < today;
-
-        return (
-          <div
-            key={task.id}
-            style={{
-              border: "1px solid grey",
-              padding: "10px",
-              marginBottom: "15px",
-      }}
-    >
-          <h3>{task.title}</h3>
-
-          <p>{task.description}</p>
-
-          <p>
-            <strong>Topic:</strong> {task.topic}
-          </p>
-
-          <p>
-            <strong>Due:</strong>{" "}
-            <span
-              style={{
-                color: overdue ? "red" : "black",
-                fontWeight: overdue ? "bold" : "normal",
-              }}
-            >
-              {task.due_date}
+    <div className="flex min-h-full flex-col">
+      <header className="border-b border-border bg-card/60 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-5">
+          <div className="flex items-center gap-3">
+            <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <ListTodo className="size-5" aria-hidden="true" />
             </span>
-
-            {overdue && (
-              <span> ⚠ Overdue</span>
-            )}
-          </p>
-
-          <p>
-            <strong>Status:</strong> {task.status}
-          </p>
-
-          <p>
-            <Link href={`/edit/${task.id}`}>
-              Edit
-            </Link>
-          </p>
-
-          <form action={archiveTaskAction}>
-            <input
-              type="hidden"
-              name="id"
-              value={task.id}
-            />
-
-            <button type="submit">
-              Archive
-            </button>
-          </form>
+            <div className="flex flex-col">
+              <h1 className="text-base font-semibold tracking-tight text-foreground">
+                Task Manager
+              </h1>
+              <p className="text-xs text-muted-foreground">
+                {tasks.length} active {tasks.length === 1 ? "task" : "tasks"}
+                {archivedTasks.length > 0
+                  ? ` · ${archivedTasks.length} archived`
+                  : ""}
+              </p>
+            </div>
+          </div>
         </div>
-      );
-      })}
+      </header>
 
-      <hr />
+      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+          <div className="w-full lg:sticky lg:top-8 lg:w-[22rem] lg:shrink-0">
+            <NewTaskForm />
+          </div>
 
-      <h2>Archived Tasks</h2>
+          <div className="flex min-w-0 flex-1 flex-col gap-10">
+            <section aria-labelledby="active-heading" className="flex flex-col gap-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2
+                  id="active-heading"
+                  className="text-sm font-semibold text-foreground"
+                >
+                  Active tasks
+                  <span className="ml-2 rounded-md bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground">
+                    {tasks.length}
+                  </span>
+                </h2>
+                <SortControl sort={sort} />
+              </div>
 
-      {archivedTasks.length === 0 && (
-        <p>No archived tasks.</p>
-      )}
+              {tasks.length === 0 ? (
+                <EmptyState
+                  icon={CheckCircle2}
+                  title="Nothing on your plate"
+                  description="You're all caught up. Create a task with the form on the left to get started."
+                />
+              ) : (
+                <div className="flex flex-col gap-3">
+                  {tasks.map((task) => (
+                    <TaskCard key={task.id} task={task} />
+                  ))}
+                </div>
+              )}
+            </section>
 
-      {archivedTasks.map((task) => (
-        <div
-          key={task.id}
-          style={{
-            border: "1px solid grey",
-            padding: "10px",
-            marginBottom: "15px",
-            opacity: 0.7,
-          }}
-        >
-          <h3>{task.title}</h3>
+            <section
+              aria-labelledby="archived-heading"
+              className="flex flex-col gap-4"
+            >
+              <h2
+                id="archived-heading"
+                className="flex items-center gap-2 text-sm font-semibold text-foreground"
+              >
+                <Archive className="size-4 text-muted-foreground" aria-hidden="true" />
+                Archived
+                <span className="rounded-md bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground">
+                  {archivedTasks.length}
+                </span>
+              </h2>
 
-          <p>{task.description}</p>
-
-          <p>
-            <strong>Topic:</strong> {task.topic}
-          </p>
-
-          <p>
-            <strong>Due:</strong> {task.due_date}
-          </p>
-
-          <p>
-            <strong>Status:</strong> {task.status}
-          </p>
-
-          <p>
-            <strong>Archived:</strong> {task.archived_at}
-          </p>
+              {archivedTasks.length === 0 ? (
+                <EmptyState
+                  icon={Archive}
+                  title="No archived tasks yet"
+                  description="Tasks you archive will be kept here for reference."
+                  compact
+                />
+              ) : (
+                <div className="flex flex-col gap-3">
+                  {archivedTasks.map((task) => (
+                    <TaskCard key={task.id} task={task} archived />
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
         </div>
-      ))}
-    </main>
+      </main>
+    </div>
   );
 }
