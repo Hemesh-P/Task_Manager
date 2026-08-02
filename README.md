@@ -42,11 +42,13 @@ https://claude.ai/share/ed967583-0847-42d6-a26e-25cffe6c8428
 
 ChatGPT (GPT-5.5) was used during this project for:
 https://chatgpt.com/share/6a6f4f05-e184-83ea-9218-25147ab1fabd
-
 - Explaining concepts
 - Debugging
 - Reviewing code
 - Generating draft code
 - Assisting with documentation
+
+Vercel0 (Opus 5) - UI Improvements
+https://v0.app/chat/new-chat-CZwjaehWwcB
 
 All generated code was reviewed, tested and modified by the author before submission.
