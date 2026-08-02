@@ -33,13 +33,35 @@ export function createTask(task: CreateTaskData) {
   );
 }
 
-export function getTasks(): Task[] {
-  return db.prepare(`
+export function getTasks(sortBy: string = "due_date"): Task[] {
+    let orderBy = "due_date ASC";
+
+    switch (sortBy) {
+    case "topic":
+        orderBy = "topic ASC";
+        break;
+
+    case "status":
+        orderBy = `
+        CASE status
+            WHEN 'todo' THEN 1
+            WHEN 'in_progress' THEN 2
+            WHEN 'complete' THEN 3
+        END
+        `;
+        break;
+
+    case "due_date":
+    default:
+        orderBy = "due_date ASC";
+    }
+
+    return db.prepare(`
     SELECT *
     FROM tasks
     WHERE archived_at IS NULL
-    ORDER BY due_date ASC
-  `).all() as Task[];
+    ORDER BY ${orderBy}
+    `).all() as Task[];
 }
 
 export function getTaskById(id: number): Task | undefined {

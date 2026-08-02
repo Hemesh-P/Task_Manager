@@ -2,8 +2,15 @@ import Link from "next/link";
 import { addTask, archiveTaskAction } from "./actions";
 import { getTasks, getArchivedTasks } from "@/lib/tasks";
 
-export default function Home() {
-  const tasks = getTasks();
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ sort?: string }>;
+}) {
+  const params = await searchParams;
+  const sort = params.sort ?? "due_date";
+
+  const tasks = getTasks(sort);
   const archivedTasks = getArchivedTasks();
 
   return (
@@ -59,21 +66,55 @@ export default function Home() {
 
       <hr />
 
+      <form method="GET">
+      <label>Sort by: </label>
+
+      <select
+        name="sort"
+        defaultValue={sort}
+      >
+        <option value="due_date">
+          Due Date
+        </option>
+
+        <option value="topic">
+          Topic
+        </option>
+
+        <option value="status">
+          Status
+        </option>
+      </select>
+
+      <button type="submit">
+        Sort
+      </button>
+    </form>
+
+    <hr />
+
       <h2>Active Tasks</h2>
 
       {tasks.length === 0 && (
         <p>No active tasks.</p>
       )}
 
-      {tasks.map((task) => (
-        <div
-          key={task.id}
-          style={{
-            border: "1px solid grey",
-            padding: "10px",
-            marginBottom: "15px",
-          }}
-        >
+      {tasks.map((task) => {
+      const today = new Date().toISOString().split("T")[0];
+
+      const overdue =
+        task.status !== "complete" &&
+        task.due_date < today;
+
+        return (
+          <div
+            key={task.id}
+            style={{
+              border: "1px solid grey",
+              padding: "10px",
+              marginBottom: "15px",
+      }}
+    >
           <h3>{task.title}</h3>
 
           <p>{task.description}</p>
@@ -83,7 +124,19 @@ export default function Home() {
           </p>
 
           <p>
-            <strong>Due:</strong> {task.due_date}
+            <strong>Due:</strong>{" "}
+            <span
+              style={{
+                color: overdue ? "red" : "black",
+                fontWeight: overdue ? "bold" : "normal",
+              }}
+            >
+              {task.due_date}
+            </span>
+
+            {overdue && (
+              <span> ⚠ Overdue</span>
+            )}
           </p>
 
           <p>
@@ -108,7 +161,8 @@ export default function Home() {
             </button>
           </form>
         </div>
-      ))}
+      );
+      })}
 
       <hr />
 
