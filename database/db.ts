@@ -5,7 +5,6 @@ import path from "path";
 console.log("Opening SQLite database...");
 
 const dbPath = path.join(process.cwd(), "database", "database.db");
-console.log("Database path:", dbPath);
 
 const db = new Database(dbPath);
 
