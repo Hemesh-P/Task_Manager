@@ -34,3 +34,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## AI Usage Declaration
+
+Claude (Sonnet-5(medium)) was used for project planning.
+https://claude.ai/share/ed967583-0847-42d6-a26e-25cffe6c8428
+
+ChatGPT (GPT-5.5) was used during this project for:
+https://chatgpt.com/share/6a6f4f05-e184-83ea-9218-25147ab1fabd
+
+- Explaining concepts
+- Debugging
+- Reviewing code
+- Generating draft code
+- Assisting with documentation
+
+All generated code was reviewed, tested and modified by the author before submission.
