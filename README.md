@@ -8,17 +8,19 @@ The application requires Node.js version 24.
 
 Check versions:
 
--node --version
--npm --version
--npm is usually installed together with Node.js
+- node --version
+- npm --version
+- npm is usually installed together with Node.js
 
 ## Getting Started
 First:
 
 git clone https://github.com/Hemesh-P/SDP-Lab1.git
+
 Then run:
 
 npm install
+
 And now run the development server:
 
 npm run dev
