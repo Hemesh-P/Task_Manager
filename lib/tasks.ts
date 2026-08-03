@@ -38,7 +38,7 @@ export function getTasks(sortBy: string = "due_date"): Task[] {
 
     switch (sortBy) {
     case "topic":
-        orderBy = "topic ASC";
+        orderBy = "topic ASC, due_date ASC";
         break;
 
     case "status":
@@ -47,13 +47,13 @@ export function getTasks(sortBy: string = "due_date"): Task[] {
             WHEN 'todo' THEN 1
             WHEN 'in_progress' THEN 2
             WHEN 'complete' THEN 3
-        END
+        END, due_date ASC
         `;
         break;
 
     case "due_date":
     default:
-        orderBy = "due_date ASC";
+        orderBy = "due_date ASC, title ASC";
     }
 
     return db.prepare(`
