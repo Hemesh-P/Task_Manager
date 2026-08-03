@@ -1,8 +1,21 @@
+"use client";
+
 import { ArrowUpDown } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export function SortControl({ sort }: { sort: string }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sort", e.target.value);
+    router.push(`${pathname}?${params.toString()}`);
+  }
+
   return (
-    <form method="GET" className="flex items-center gap-2">
+    <div className="flex items-center gap-2">
       <label
         htmlFor="sort"
         className="hidden text-xs font-medium text-muted-foreground sm:inline"
@@ -18,7 +31,8 @@ export function SortControl({ sort }: { sort: string }) {
         <select
           id="sort"
           name="sort"
-          defaultValue={sort}
+          value={sort}
+          onChange={handleChange}
           className="field-control appearance-none py-1.5 pl-8 pr-8 text-xs"
         >
           <option value="due_date">Due date</option>
@@ -26,10 +40,6 @@ export function SortControl({ sort }: { sort: string }) {
           <option value="status">Status</option>
         </select>
       </div>
-
-      <button type="submit" className="btn-ghost py-2">
-        Apply
-      </button>
-    </form>
+    </div>
   );
 }
