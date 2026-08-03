@@ -33,7 +33,7 @@ npm is usually installed together with Node.js.
 
 Clone the repository:
 ```bash
-git clone https://github.com/Hemesh-P/SDP-Lab1.git
+git clone https://github.com/Hemesh-P/Task_Manager.git
 cd SDP-Lab1
 ```
 
