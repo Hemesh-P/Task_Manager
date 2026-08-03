@@ -1,18 +1,27 @@
+TaskManager - a web app designed to help you stay organised.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+
+## Required Software
+The application requires Node.js version 24.
+
+Check versions:
+
+-node --version
+-npm --version
+-npm is usually installed together with Node.js
+
 ## Getting Started
+First:
 
-First, run the development server:
+git clone https://github.com/Hemesh-P/SDP-Lab1.git
+Then run:
 
-```bash
+npm install
+And now run the development server:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
