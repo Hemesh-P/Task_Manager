@@ -34,7 +34,7 @@ npm is usually installed together with Node.js.
 Clone the repository:
 ```bash
 git clone https://github.com/Hemesh-P/Task_Manager.git
-cd SDP-Lab1
+cd Task_Manager
 ```
 
 Install dependencies:
