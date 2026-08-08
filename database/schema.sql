@@ -1,20 +1,13 @@
 CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-
     title TEXT NOT NULL,
-
     description TEXT,
-
     due_date TEXT NOT NULL,
-
     topic TEXT NOT NULL,
 
-    status TEXT NOT NULL
-        CHECK(status IN ('todo','in_progress','complete'))
-        DEFAULT 'todo',
+    status TEXT NOT NULL DEFAULT 'todo'
+        CHECK (status IN ('todo', 'in_progress', 'complete')),
 
     archived_at TEXT,
-
-    created_at TEXT NOT NULL
-        DEFAULT CURRENT_TIMESTAMP
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

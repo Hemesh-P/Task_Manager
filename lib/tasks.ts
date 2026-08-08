@@ -33,35 +33,31 @@ export function createTask(task: CreateTaskData) {
   );
 }
 
-export function getTasks(sortBy: string = "due_date"): Task[] {
-    let orderBy = "due_date ASC";
+export function getTasks(sort: string = "due_date"): Task[] {
+  let orderBy = "due_date ASC";
 
-    switch (sortBy) {
-    case "topic":
-        orderBy = "topic ASC, due_date ASC";
-        break;
+  if (sort === "topic") {
+    orderBy = "topic ASC";
+  }
 
-    case "status":
-        orderBy = `
-        CASE status
-            WHEN 'todo' THEN 1
-            WHEN 'in_progress' THEN 2
-            WHEN 'complete' THEN 3
-        END, due_date ASC
-        `;
-        break;
+  if (sort === "status") {
+    orderBy = `
+      CASE status
+        WHEN 'todo' THEN 1
+        WHEN 'in_progress' THEN 2
+        WHEN 'complete' THEN 3
+      END
+    `;
+  }
 
-    case "due_date":
-    default:
-        orderBy = "due_date ASC, title ASC";
-    }
-
-    return db.prepare(`
-    SELECT *
-    FROM tasks
-    WHERE archived_at IS NULL
-    ORDER BY ${orderBy}
-    `).all() as Task[];
+  return db
+    .prepare(`
+      SELECT *
+      FROM tasks
+      WHERE archived_at IS NULL
+      ORDER BY ${orderBy}
+    `)
+    .all() as Task[];
 }
 
 export function getTaskById(id: number): Task | undefined {
@@ -72,6 +68,37 @@ export function getTaskById(id: number): Task | undefined {
   `);
 
   return stmt.get(id) as Task | undefined;
+}
+
+export function updateTask(
+  id: number,
+  task: {
+    title: string;
+    description: string;
+    due_date: string;
+    topic: string;
+    status: "todo" | "in_progress" | "complete";
+  }
+) {
+  const stmt = db.prepare(`
+    UPDATE tasks
+    SET
+      title = ?,
+      description = ?,
+      due_date = ?,
+      topic = ?,
+      status = ?
+    WHERE id = ?
+  `);
+
+  stmt.run(
+    task.title,
+    task.description,
+    task.due_date,
+    task.topic,
+    task.status,
+    id
+  );
 }
 
 export function archiveTask(id: number) {
@@ -85,38 +112,12 @@ export function archiveTask(id: number) {
 }
 
 export function getArchivedTasks(): Task[] {
-  return db.prepare(`
-    SELECT *
-    FROM tasks
-    WHERE archived_at IS NOT NULL
-    ORDER BY archived_at DESC
-  `).all() as Task[];
-}
-
-export function updateTask(
-  id: number,
-  task: {
-    title: string;
-    description: string;
-    due_date: string;
-    topic: string;
-  }
-) {
-  const stmt = db.prepare(`
-    UPDATE tasks
-    SET
-      title = ?,
-      description = ?,
-      due_date = ?,
-      topic = ?
-    WHERE id = ?
-  `);
-
-  stmt.run(
-    task.title,
-    task.description,
-    task.due_date,
-    task.topic,
-    id
-  );
+  return db
+    .prepare(`
+      SELECT *
+      FROM tasks
+      WHERE archived_at IS NOT NULL
+      ORDER BY archived_at DESC
+    `)
+    .all() as Task[];
 }

@@ -1,23 +1,25 @@
 # Third-Party Code
 
-## Next.js
-
-Used as the web application framework. It provides routing, server actions, and React integration.
-
-## React
-
-Used to build the user interface using reusable components.
-
 ## better-sqlite3
 
-Used to communicate with the local SQLite database. Its synchronous API keeps database code simple for a single-user local application.
+`better-sqlite3` is used to communicate with the local SQLite database from Node.js. It was chosen because it provides a simple synchronous API that suits this single-user local application and allows the SQL schema and queries to remain explicit.
 
 ## Vitest
 
-Used as the project's test runner. It provides fast unit testing and integrates well with the project's TypeScript setup.
+`Vitest` is used as the project's test runner. It provides a simple test setup for the TypeScript/JavaScript project and allows the database functionality to be tested using an isolated in-memory SQLite database.
 
----
+## Next.js
 
-## AI Declaration
+Next.js is used as the application framework because the project is built using the Next.js App Router and server actions for handling task operations.
 
-This document was drafted with assistance from ChatGPT (GPT-5.5). The author reviewed and edited the final content.
+## React
+
+React is used to build the application's user interface and interactive components.
+
+## lucide-react
+
+`lucide-react` is used for interface icons such as edit, archive and status icons rather than creating custom SVG icons manually.
+
+## AI Usage Declaration
+
+ChatGPT was used during development for planning, implementation assistance, debugging, and code generation. AI-generated suggestions were reviewed and adapted by the author before being incorporated into the project.

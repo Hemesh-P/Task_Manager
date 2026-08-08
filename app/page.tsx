@@ -5,6 +5,8 @@ import { SortControl } from "@/components/sort-control";
 import { TaskCard } from "@/components/task-card";
 import { EmptyState } from "@/components/empty-state";
 import type { Task } from "@/lib/tasks";
+import { addTask, archiveTaskAction } from "./actions";
+import Link from "next/link";
 
 const STATUS_LABELS: Record<Task["status"], string> = {
   todo: "To do",

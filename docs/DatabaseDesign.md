@@ -1,73 +1,75 @@
 # Database Design
 
-## Database
+## SQLite Database
 
-The application uses a local SQLite database stored as:
+The application uses a local SQLite database stored in `database/database.db`.
 
-database/database.db
+The database contains one main table:
 
-The project contains a single table called **tasks**.
-
----
-
-## Tasks Table
+## tasks
 
 | Column | Type | Description |
-|--------|------|-------------|
-| id | INTEGER PRIMARY KEY AUTOINCREMENT | Unique task ID |
+|---|---|---|
+| id | INTEGER PRIMARY KEY AUTOINCREMENT | Unique task identifier |
 | title | TEXT NOT NULL | Task title |
-| description | TEXT | Optional description |
-| due_date | TEXT NOT NULL | Due date stored as ISO date |
-| topic | TEXT NOT NULL | Subject/category |
-| status | TEXT NOT NULL | Todo, In Progress or Complete |
-| archived_at | TEXT | Null while active, timestamp when archived |
-| created_at | TEXT | Creation timestamp |
+| description | TEXT | Optional task description |
+| due_date | TEXT NOT NULL | Task due date stored as an ISO date |
+| topic | TEXT NOT NULL | Task topic |
+| status | TEXT NOT NULL | Task status |
+| archived_at | TEXT | NULL for active tasks, timestamp when archived |
+| created_at | TEXT NOT NULL | Time the task was created |
 
----
+## Status
 
-## Status Constraint
+Tasks have exactly three possible statuses:
 
-The status column is limited using a CHECK constraint.
+- `todo`
+- `in_progress`
+- `complete`
 
-Allowed values are:
+The status is constrained in the SQLite schema so that other values cannot be inserted.
 
-- todo
-- in_progress
-- complete
+New tasks automatically receive the `todo` status.
 
-This prevents invalid statuses from being stored.
-
----
+Users can change the status when editing a task.
 
 ## Archiving
 
-Tasks are never deleted.
+Tasks are never deleted when archived.
 
-Instead, the archived_at field is populated with the current timestamp.
+Instead, `archived_at` is set to the current timestamp. An `archived_at` value of `NULL` means that the task is active.
 
-Active tasks have:
-
-archived_at = NULL
-
-Archived tasks remain in the database and can still be viewed.
-
----
+This means archived tasks remain stored in the database and can still be displayed in the Archived section.
 
 ## Overdue Tasks
 
-Overdue is **not stored** in the database.
+Overdue is not stored as a database column.
 
-Instead it is calculated whenever tasks are displayed.
+A task is considered overdue when:
 
-A task is overdue when:
+1. Its due date has passed, and
+2. Its status is not `complete`.
 
-- the due date has passed
-- the task is not marked Complete
+The overdue value is therefore derived when tasks are read rather than stored permanently.
 
-This avoids storing data that would become outdated over time.
+This prevents the overdue value from becoming stale as time passes.
 
----
+## Sorting
 
-## AI Declaration
+Active tasks can be sorted by:
 
-This document was drafted with assistance from ChatGPT (GPT-5.5). The author reviewed and edited the final content.
+- Due date
+- Topic
+- Status
+
+When sorting by status, the application deliberately uses:
+
+1. To do
+2. In progress
+3. Complete
+
+rather than alphabetical order.
+
+## AI Usage Declaration
+
+ChatGPT was used to assist with planning and reviewing the database design and implementation. The final schema and implementation were reviewed and adapted by the author.
