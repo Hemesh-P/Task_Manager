@@ -54,22 +54,6 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
 to automatically optimize and load [Geist](https://vercel.com/font), a font family for Vercel.
 
-## Available Scripts
-
-- `npm run dev` — start the development server
-- `npm run build` — build for production
-- `npm run start` — run the production build
-- `npm run lint` — lint the codebase
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) — learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) — an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) — feedback and contributions are welcome.
-
 ## AI Usage Declaration
 
 Claude (Sonnet-5(medium)) was used for project planning.
